@@ -166,7 +166,7 @@ class KaoYanBangApi:
             print(f'id:{major_id}\n专业代码:{major_code}\n专业排名:{major_rank}\n专业名称:{major_name}\n关注人数:{follow_num}\nparent:{parent}\n专业类型:{major_type}\n学校数量:{school_num}\n今年备考人数:{exam_num}\n近7日新增人数:{week_exam_num}\n\n')
         return r_majors
 
-    def get_school_departments_by_major_code(self, major_code):
+    def get_departments_by_school_major(self, major_code):
         """
         通过专业代码获取学校学院信息
         :return:
@@ -179,6 +179,7 @@ class KaoYanBangApi:
             'Q-Organization': 'kaoyan',
         }
         all_result_data = []
+        want_ret = []
         r = requests.get(school_major_url, headers=headers)
         r_json = json.loads(r.text)
         status = r_json['status']
@@ -196,7 +197,10 @@ class KaoYanBangApi:
             all_result_data += r1_result_data
             result_total = result_total - int(pagelimit)
         # print(all_result_data)
-        return all_result_data
+        for _ in all_result_data:
+            if _.get('school_name') in target_school_name:
+                want_ret.append(_)
+        return want_ret
 
 
 if __name__ == '__main__':
@@ -205,6 +209,6 @@ if __name__ == '__main__':
     # ret_school = kyb.get_majorlist_by_id('1902')
     # ret_school = kyb.get_target_majors_of_school('重庆邮电大学')  # 重庆邮电大学 南方科技大学 重庆大学
     # ret_school = kyb.get_target_schools()
-    ret_school = kyb.get_school_departments_by_major_code('20085400')
+    ret_school = kyb.get_departments_by_school_major('20085400')
     print(ret_school)
-    # write_data_into_excel(xlspath='kyb_all_schools.xlsx', data_json_list=ret_school)
+    write_data_into_excel(xlspath='kyb_target_major_schools.xlsx', data_json_list=ret_school)
