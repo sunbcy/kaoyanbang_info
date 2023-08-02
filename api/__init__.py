@@ -68,6 +68,18 @@ class KaoYanBangApi:
             province_name = _.get('province_name')
             is_other = _.get('is_other')
             school_type = _.get('school_type')
+            """
+            1-理工类
+            2-艺体类
+            3-综合类
+            4-师范类
+            5-农林类
+            6-文法类
+            7-医药类
+            8-军事类
+            9-财经类
+            10-其他
+            """
             is_edu = _.get('is_edu')
             is_local = _.get('is_local')
             is_center = _.get('is_center')
