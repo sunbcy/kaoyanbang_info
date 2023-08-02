@@ -46,35 +46,6 @@ class KaoYanBangApi:
 
         return all_result_data
 
-        # for _ in all_result_data:
-        #     school_id = _.get('school_id')
-        #     school_code = _.get('school_code')
-        #     school_name = _.get('school_name')
-        #     badge = _.get('badge')
-        #     is_211 = _.get('is_211')
-        #     is_985 = _.get('is_985')
-        #     is_score = _.get('is_score')
-        #     follow_num = _.get('follow_num')  # 关注人数
-        #     is_first_class = _.get('is_first_class')
-        #     departments = _.get('departments')
-        #     province_id = _.get('province_id')
-        #     province_name = _.get('province_name')
-        #     is_other = _.get('is_other')
-        #     school_type = _.get('school_type')
-        #     is_edu = _.get('is_edu')
-        #     is_local = _.get('is_local')
-        #     is_center = _.get('is_center')
-        #     exam_num = _.get('exam_num')  # 今年备考人数
-        #     week_exam_num = _.get('week_exam_num')  # 近7日新增
-        #     bbs_id = _.get('bbs_id')
-        #     student_recruitment = _.get('student_recruitment')
-        #
-        #     if school_name in target_school_name:
-        #         r_target_schools.append(_)
-        #         print(f'{school_name}\n关注人数:{follow_num}\n所属省份:{province_name}\n今年备考人数:{exam_num}\n' +
-        #               f'近7日新增:{week_exam_num}\n学生官网:{student_recruitment}\n\n')
-        # return r_target_schools
-
     def get_target_schools(self):
         """
         获取目标学校

@@ -6,24 +6,24 @@ xls_header_map = {
     'school_id': {'index': 1, 'zh': '学校ID'},
     'school_code': {'index': 2, 'zh': '学校代码'},
     'school_name': {'index': 3, 'zh': '学校名称'},
-    'badge': {'index': 4, 'zh': '学校校徽'},
-    'is_211': {'index': 5, 'zh': '211'},
-    'is_985': {'index': 6, 'zh': '985'},
-    'is_score': {'index': 7, 'zh': '是分数'},
-    'follow_num': {'index': 8, 'zh': '关注人数'},
-    'is_first_class': {'index': 9, 'zh': '一级'},
+    'is_211': {'index': 4, 'zh': '211'},
+    'is_985': {'index': 5, 'zh': '985'},
+    'is_score': {'index': 6, 'zh': '自主划线'},
+    'is_first_class': {'index': 7, 'zh': '双一流'},
+    'is_other': {'index': 8, 'zh': '普通高校'},
+    'follow_num': {'index': 9, 'zh': '关注人数'},
     'departments': {'index': 10, 'zh': '学院'},
     'province_id': {'index': 11, 'zh': '省份ID'},
     'province_name': {'index': 12, 'zh': '省份名称'},
-    'is_other': {'index': 13, 'zh': '其他'},
-    'school_type': {'index': 14, 'zh': '学校类型'},
-    'is_edu': {'index': 15, 'zh': '教育部'},
-    'is_local': {'index': 16, 'zh': '当地'},
-    'is_center': {'index': 17, 'zh': '中心'},
-    'exam_num': {'index': 18, 'zh': '今年备考人数'},
-    'week_exam_num': {'index': 19, 'zh': '近7日新增'},
-    'bbs_id': {'index': 20, 'zh': '论坛ID'},
-    'student_recruitment': {'index': 21, 'zh': '招生通告'},
+    'school_type': {'index': 13, 'zh': '学校类型'},
+    'is_edu': {'index': 14, 'zh': '教育部'},
+    'is_local': {'index': 15, 'zh': '当地'},
+    'is_center': {'index': 16, 'zh': '中心'},
+    'exam_num': {'index': 17, 'zh': '今年备考人数'},
+    'week_exam_num': {'index': 18, 'zh': '近7日新增'},
+    'bbs_id': {'index': 19, 'zh': '论坛ID'},
+    'student_recruitment': {'index': 20, 'zh': '招生通告'},
+    'badge': {'index': 21, 'zh': '学校校徽'},
 }
 
 
@@ -63,4 +63,4 @@ def write_data_into_excel(xlspath, data_json_list, sheet_name='Sheet1'):
         # openpyxl引擎设置字符宽度时会缩水0.5个左右字符串,所以干脆+2使左右都空出一个字宽.
         worksheet.column_dimensions[get_column_letter(i)].width = width + 2
     # 保存writer中的数据至excel
-    writer._save()
+    writer._save()  # 等于writer.close()
