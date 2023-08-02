@@ -1,6 +1,6 @@
 import requests
 import json
-from conf import target_school_name
+from conf import target_school_name, target_major_code_list
 from urllib.parse import quote
 from xlsx import write_data_into_excel
 
@@ -166,6 +166,38 @@ class KaoYanBangApi:
             print(f'id:{major_id}\n专业代码:{major_code}\n专业排名:{major_rank}\n专业名称:{major_name}\n关注人数:{follow_num}\nparent:{parent}\n专业类型:{major_type}\n学校数量:{school_num}\n今年备考人数:{exam_num}\n近7日新增人数:{week_exam_num}\n\n')
         return r_majors
 
+    def get_school_departments_by_major_code(self, major_code):
+        """
+        通过专业代码获取学校学院信息
+        :return:
+        """
+        pagelimit = '20'
+        pagestart = '1'
+        school_major_url = f'http://{self.host}/api-cpp/major/schools?major_id={major_code}&sort_by_school_rank=1&math_type=-1&study_type=-1&foreign_type=-1&limit={pagelimit}&page={pagestart}&is_edu=-1&is_local=-1&is_center=-1'
+        headers = {
+            'User-Agent': 'Mozilla/ (iPhone; CPU iPhone OS like Mac OS X)AppleWebKit/(KHTML, like Gecko) Mobile/KaoYanClub//K-Product-Line:kaoyan-app;/K-New-Product-Line:ky-app;/kmf_appinner;/appversion:4.3.4;',
+            'Q-Organization': 'kaoyan',
+        }
+        all_result_data = []
+        r = requests.get(school_major_url, headers=headers)
+        r_json = json.loads(r.text)
+        status = r_json['status']
+        result = r_json['result']
+        result_total = result['total']
+        result_data = result['data']
+        all_result_data += result_data
+        while result_total - int(pagelimit) > 0:
+            pagestart = str(int(pagestart) + 1)
+            school_major_url = f'http://{self.host}/api-cpp/major/schools?major_id={major_code}&sort_by_school_rank=1&math_type=-1&study_type=-1&foreign_type=-1&limit={pagelimit}&page={pagestart}&is_edu=-1&is_local=-1&is_center=-1'
+            r1 = requests.get(school_major_url, headers=headers)
+            r1_json = json.loads(r1.text)
+            r1_result = r1_json['result']
+            r1_result_data = r1_result['data']
+            all_result_data += r1_result_data
+            result_total = result_total - int(pagelimit)
+        # print(all_result_data)
+        return all_result_data
+
 
 if __name__ == '__main__':
     kyb = KaoYanBangApi()
@@ -173,6 +205,6 @@ if __name__ == '__main__':
     # ret_school = kyb.get_majorlist_by_id('1902')
     # ret_school = kyb.get_target_majors_of_school('重庆邮电大学')  # 重庆邮电大学 南方科技大学 重庆大学
     # ret_school = kyb.get_target_schools()
-    ret_school = kyb.get_all_schools()
+    ret_school = kyb.get_school_departments_by_major_code('20085400')
     print(ret_school)
-    write_data_into_excel(xlspath='kyb_all_schools.xlsx', data_json_list=ret_school)
+    # write_data_into_excel(xlspath='kyb_all_schools.xlsx', data_json_list=ret_school)
