@@ -2,6 +2,7 @@ import requests
 import json
 from conf import target_school_name
 from urllib.parse import quote
+from xlsx import write_data_into_excel
 
 api_host = 'api.qz100.com'
 
@@ -182,12 +183,13 @@ class KaoYanBangApi:
             print(f'id:{major_id}\n专业代码:{major_code}\n专业排名:{major_rank}\n专业名称:{major_name}\n关注人数:{follow_num}\nparent:{parent}\n专业类型:{major_type}\n学校数量:{school_num}\n今年备考人数:{exam_num}\n近7日新增人数:{week_exam_num}\n\n')
         return r_majors
 
-    # def get_target_school_majors_info
 
 if __name__ == '__main__':
     kyb = KaoYanBangApi()
     # ret_school = kyb.search_schools('重庆邮电大学')
     # ret_school = kyb.get_majorlist_by_id('1902')
     # ret_school = kyb.get_target_majors_of_school('重庆邮电大学')  # 重庆邮电大学 南方科技大学 重庆大学
-    ret_school = kyb.get_target_schools()
+    # ret_school = kyb.get_target_schools()
+    ret_school = kyb.get_all_schools()
     print(ret_school)
+    write_data_into_excel(xlspath='kyb_all_schools.xlsx', data_json_list=ret_school)
