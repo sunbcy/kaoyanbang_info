@@ -4,10 +4,12 @@ from conf import target_school_name, target_major_code_list
 from urllib.parse import quote
 from xlsx import write_data_into_excel
 
-api_host = 'api.qz100.com'
+api_host = 'api.qz100.com'  # 考研帮
+yantu_api_host = 'api.kaoyanvip.cn'  # 研途考研
 
 
 class KaoYanBangApi:
+    """考研帮API"""
     def __init__(self, host=api_host):
         self.host = host
 
@@ -203,12 +205,60 @@ class KaoYanBangApi:
         return want_ret
 
 
+class YanTuApi:
+    """研途考研API"""
+    def __init__(self, host=yantu_api_host):
+        self.host = host
+
+    def get_all_schools(self):
+        pagelimit = '872'
+        pagestart = '1'
+        api_url = f'https://{self.host}/wx/v1/rcmd/search/school/?level=&mold=&page={pagestart}&size={pagelimit}'
+        headers = {
+            'auth-sys': 'rcmd',
+            'User-Agent': '%E7%A0%94%E9%80%94%E8%80%83%E7%A0%94/2023071405 CFNetwork/1469 Darwin/23.0.0',
+            'x-yt-application': 'wxapp',
+        }
+        r = requests.get(api_url, headers=headers)
+        r_json = json.loads(r.text)
+        code = r_json['code']
+        msg = r_json['msg']
+        data = r_json['data']
+        data_count = data['count']
+        data_results = data['results']
+        return data_results
+
+    def search_title_by_schoolcode_major_code(self, sch_code='10611', maj_code='081000'):
+        """通过学校代码和专业代码返回信息"""
+        api_url = f'https://{self.host}/wx/v1/rcmd/search/title/?school_code={sch_code}&major_code={maj_code}'
+        headers = {
+            'auth-sys': 'rcmd',
+            'User-Agent': '%E7%A0%94%E9%80%94%E8%80%83%E7%A0%94/2023071405 CFNetwork/1469 Darwin/23.0.0',
+            'x-yt-application': 'wxapp',
+        }
+        r = requests.get(api_url, headers=headers)
+        r_json = json.loads(r.text)
+        code = r_json['code']
+        msg = r_json['msg']
+        data = r_json['data']
+        school_name = data['school_name']
+        major_name = data['major_name']
+        province = data['province']
+        badge_url = data['badge_url']
+        level = data['level']
+        return data
+
+
 if __name__ == '__main__':
-    kyb = KaoYanBangApi()
-    # ret_school = kyb.search_schools('重庆邮电大学')
-    # ret_school = kyb.get_majorlist_by_id('1902')
-    # ret_school = kyb.get_target_majors_of_school('重庆邮电大学')  # 重庆邮电大学 南方科技大学 重庆大学
-    # ret_school = kyb.get_target_schools()
-    ret_school = kyb.get_departments_by_school_major('20085400')
-    print(ret_school)
-    write_data_into_excel(xlspath='kyb_target_major_schools.xlsx', data_json_list=ret_school)
+    # kyb = KaoYanBangApi()
+    # # ret_school = kyb.search_schools('重庆邮电大学')
+    # # ret_school = kyb.get_majorlist_by_id('1902')
+    # # ret_school = kyb.get_target_majors_of_school('重庆邮电大学')  # 重庆邮电大学 南方科技大学 重庆大学
+    # # ret_school = kyb.get_target_schools()
+    # ret_school = kyb.get_departments_by_school_major('20085400')
+    # print(ret_school)
+    # write_data_into_excel(xlspath='kyb_target_major_schools_20230804.xlsx', data_json_list=ret_school)
+
+    yt = YanTuApi()
+    all_schools = yt.search_title_by_schoolcode_major_code()
+    print(all_schools)
